@@ -23,6 +23,7 @@ import type {
   DraggableEntry,
   StartPublishingResult,
 } from './dimension-marshal-types';
+import isSameValueArray from './is-same-value-array';
 
 type Collection = {|
   critical: Critical,
@@ -280,7 +281,12 @@ export default (callbacks: Callbacks) => {
     const home: DroppableDescriptor = collection.critical.droppable;
     values(entries.droppables)
       .filter(
-        (entry: DroppableEntry): boolean => entry.descriptor.type === home.type,
+        (entry: DroppableEntry): boolean => {
+          const entryType = entry.descriptor.type;
+          return Array.isArray(entryType) && Array.isArray(home.type)
+            ? isSameValueArray(entryType, home.type)
+            : entryType === home.type;
+        },
       )
       .forEach((entry: DroppableEntry) => entry.callbacks.dragStopped());
 

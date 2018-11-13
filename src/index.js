@@ -14,7 +14,7 @@ export { resetServerContext } from './view/drag-drop-context';
 
 export type {
   Id,
-  TypeId,
+  DroppableType,
   DraggableId,
   DroppableId,
   MovementMode,

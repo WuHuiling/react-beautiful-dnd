@@ -17,14 +17,16 @@ import type {
   Placeholder,
   DraggableId,
   DroppableId,
-  TypeId,
+  DraggableType,
+  DroppableType,
 } from '../../types';
 import type { DimensionMarshal } from '../../state/dimension-marshal/dimension-marshal-types';
 
 type Props = {|
   draggableId: DraggableId,
   droppableId: DroppableId,
-  type: TypeId,
+  droppableType: DroppableType,
+  type: DraggableType,
   index: number,
   getDraggableRef: () => ?HTMLElement,
   children: Node,
@@ -55,12 +57,14 @@ export default class DraggableDimensionPublisher extends Component<Props> {
       id: DraggableId,
       index: number,
       droppableId: DroppableId,
-      type: TypeId,
+      type: DraggableType,
+      droppableType: DroppableType,
     ): DraggableDescriptor => ({
       id,
       index,
       droppableId,
       type,
+      droppableType,
     }),
   );
 
@@ -71,6 +75,7 @@ export default class DraggableDimensionPublisher extends Component<Props> {
       this.props.index,
       this.props.droppableId,
       this.props.type,
+      this.props.droppableType,
     );
 
     if (!this.publishedDescriptor) {

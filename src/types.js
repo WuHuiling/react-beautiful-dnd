@@ -6,9 +6,12 @@ export type DraggableId = Id;
 export type DroppableId = Id;
 export type TypeId = Id;
 
+export type DraggableType = TypeId;
+export type DroppableType = TypeId | TypeId[];
+
 export type DroppableDescriptor = {|
   id: DroppableId,
-  type: TypeId,
+  type: DroppableType,
 |};
 
 export type DraggableDescriptor = {|
@@ -16,9 +19,10 @@ export type DraggableDescriptor = {|
   index: number,
   // Inherited from Droppable
   droppableId: DroppableId,
+  droppableType: DroppableType,
   // This is technically redundant but it avoids
   // needing to look up a parent droppable just to get its type
-  type: TypeId,
+  type: DraggableType,
 |};
 
 export type Direction = 'horizontal' | 'vertical';
@@ -226,7 +230,7 @@ export type DragPositions = {|
 // published when a drag starts
 export type DragStart = {|
   draggableId: DraggableId,
-  type: TypeId,
+  type: DraggableType,
   source: DraggableLocation,
   mode: MovementMode,
 |};

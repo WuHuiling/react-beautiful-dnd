@@ -9,7 +9,7 @@ import type {
   DraggableDimension,
   DroppableId,
   MovementMode,
-  TypeId,
+  DroppableType,
 } from '../../types';
 import DraggableDimensionPublisher from '../draggable-dimension-publisher';
 import DragHandle from '../drag-handle';
@@ -87,7 +87,8 @@ export default class Draggable extends Component<Props> {
   // https://github.com/brigand/babel-plugin-flow-react-proptypes/issues/22
   static contextTypes = {
     [droppableIdKey]: PropTypes.string.isRequired,
-    [droppableTypeKey]: PropTypes.string.isRequired,
+    [droppableTypeKey]: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+      .isRequired,
     [styleContextKey]: PropTypes.string.isRequired,
   };
 
@@ -334,9 +335,10 @@ export default class Draggable extends Component<Props> {
       dragging,
       isDragDisabled,
       disableInteractiveElementBlocking,
+      type,
     } = this.props;
     const droppableId: DroppableId = this.context[droppableIdKey];
-    const type: TypeId = this.context[droppableTypeKey];
+    const droppableType: DroppableType = this.context[droppableTypeKey];
     const isDragging: boolean = Boolean(dragging);
     const isDropAnimating: boolean = Boolean(dragging && dragging.dropping);
 
@@ -345,6 +347,7 @@ export default class Draggable extends Component<Props> {
         key={draggableId}
         draggableId={draggableId}
         droppableId={droppableId}
+        droppableType={droppableType}
         type={type}
         index={index}
         getDraggableRef={this.getDraggableRef}

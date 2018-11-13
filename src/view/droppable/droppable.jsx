@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 import PropTypes from 'prop-types';
 import DroppableDimensionPublisher from '../droppable-dimension-publisher';
 import type { Props, Provided, StateSnapshot } from './droppable-types';
-import type { DroppableId, TypeId } from '../../types';
+import type { DroppableId, DroppableType } from '../../types';
 import Placeholder from '../placeholder';
 import throwIfRefIsInvalid from '../throw-if-invalid-inner-ref';
 import {
@@ -15,7 +15,7 @@ import {
 import { warning } from '../../dev-warning';
 
 type Context = {
-  [string]: DroppableId | TypeId,
+  [string]: DroppableId | DroppableType,
 };
 
 export default class Droppable extends Component<Props> {
@@ -44,7 +44,8 @@ export default class Droppable extends Component<Props> {
   // https://github.com/brigand/babel-plugin-flow-react-proptypes/issues/22
   static childContextTypes = {
     [droppableIdKey]: PropTypes.string.isRequired,
-    [droppableTypeKey]: PropTypes.string.isRequired,
+    [droppableTypeKey]: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+      .isRequired,
   };
 
   getChildContext(): Context {

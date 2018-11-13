@@ -7,6 +7,7 @@ import type {
   DraggableDimension,
   State,
   MovementMode,
+  DraggableType,
 } from '../../types';
 import {
   lift,
@@ -132,6 +133,7 @@ export type MapProps = {|
 export type ChildrenFn = (Provided, StateSnapshot) => Node;
 
 export type DefaultProps = {|
+  type: DraggableType,
   isDragDisabled: boolean,
   disableInteractiveElementBlocking: boolean,
 |};

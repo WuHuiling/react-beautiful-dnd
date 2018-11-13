@@ -8,3 +8,5 @@ export const droppableTypeKey: string = prefix('droppable-type');
 export const dimensionMarshalKey: string = prefix('dimension-marshal');
 export const styleContextKey: string = prefix('style-context');
 export const canLiftContextKey: string = prefix('can-lift');
+
+export const defaultType = 'DEFAULT';

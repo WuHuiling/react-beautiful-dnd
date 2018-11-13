@@ -5,7 +5,7 @@ import { Component } from 'react';
 import memoizeOne from 'memoize-one';
 import { connect } from 'react-redux';
 import Draggable from './draggable';
-import { storeKey } from '../context-keys';
+import { storeKey, defaultType } from '../context-keys';
 import { origin } from '../../state/position';
 import isStrictEqual from '../is-strict-equal';
 import { curves, combine } from '../animation';
@@ -263,6 +263,7 @@ const defaultProps = ({
   isDragDisabled: false,
   // cannot drag interactive elements by default
   disableInteractiveElementBlocking: false,
+  type: defaultType,
 }: DefaultProps);
 
 // Abstract class allows to specify props and defaults to component.

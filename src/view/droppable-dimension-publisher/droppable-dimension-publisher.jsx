@@ -16,18 +16,18 @@ import type {
 import getEnv, { type Env } from './get-env';
 import type {
   DroppableId,
-  TypeId,
   DroppableDimension,
   DroppableDescriptor,
   Direction,
   ScrollOptions,
+  DroppableType,
 } from '../../types';
 import getDimension from './get-dimension';
 import { warning } from '../../dev-warning';
 
 type Props = {|
   droppableId: DroppableId,
-  type: TypeId,
+  type: DroppableType,
   direction: Direction,
   isDropDisabled: boolean,
   isCombineEnabled: boolean,
@@ -220,7 +220,7 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
   }
 
   getMemoizedDescriptor = memoizeOne(
-    (id: DroppableId, type: TypeId): DroppableDescriptor => ({
+    (id: DroppableId, type: DroppableType): DroppableDescriptor => ({
       id,
       type,
     }),
