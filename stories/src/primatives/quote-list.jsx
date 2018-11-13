@@ -21,6 +21,8 @@ const Wrapper = styled.div`
   opacity: ${({ isDropDisabled }) => (isDropDisabled ? 0.5 : 'inherit')};
   padding: ${grid}px;
   border: ${grid}px;
+  max-height: 300px;
+  overflow: auto;
   padding-bottom: 0;
   transition: background-color 0.1s ease, opacity 0.1s ease;
   user-select: none;
@@ -79,7 +81,7 @@ class InnerQuoteList extends React.Component<QuoteListProps> {
 
   render() {
     return this.props.quotes.map((quote: Quote, index: number) => (
-      <Draggable key={quote.id} draggableId={quote.id} index={index}>
+      <Draggable key={quote.id} draggableId={quote.id} index={index} type="QUOTE">
         {(
           dragProvided: DraggableProvided,
           dragSnapshot: DraggableStateSnapshot,

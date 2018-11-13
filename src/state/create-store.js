@@ -16,6 +16,7 @@ import type { StyleMarshal } from '../view/style-marshal/style-marshal-types';
 import type { AutoScroller } from './auto-scroller/auto-scroller-types';
 import type { Responders, Announce } from '../types';
 import type { Store } from './store-types';
+import log from '../debug/middleware/log';
 
 // We are checking if window is available before using it.
 // This is needed for universal apps that render the component server side.
@@ -49,7 +50,8 @@ export default ({
         // > uncomment to use
         // debugging logger
         // require('../debug/middleware/log').default,
-        // user timing api
+        // log,
+        // user timinge api
         // require('../debug/middleware/user-timing').default,
         // debugging timer
         // require('../debug/middleware/action-timing').default,
