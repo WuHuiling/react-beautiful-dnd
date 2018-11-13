@@ -19,6 +19,7 @@ import type {
   Viewport,
 } from '../../types';
 import getViewport from '../../view/window/get-viewport';
+import isSameValueArray from './is-same-value-array';
 
 type Args = {|
   critical: Critical,
@@ -41,7 +42,12 @@ export default ({
   const droppables: DroppableDimension[] = values(entries.droppables)
     // Exclude things of the wrong type
     .filter(
-      (entry: DroppableEntry): boolean => entry.descriptor.type === home.type,
+      (entry: DroppableEntry): boolean => {
+        const entryType = entry.descriptor.type;
+        return Array.isArray(entryType) && Array.isArray(home.type)
+          ? isSameValueArray(entryType, home.type)
+          : entryType === home.type;
+      },
     )
     .map(
       (entry: DroppableEntry): DroppableDimension =>
@@ -50,8 +56,12 @@ export default ({
 
   const draggables: DraggableDimension[] = values(entries.draggables)
     .filter(
-      (entry: DraggableEntry): boolean =>
-        entry.descriptor.type === critical.draggable.type,
+      (entry: DraggableEntry): boolean => {
+        const droppableType = entry.descriptor.droppableType;
+        return Array.isArray(droppableType)
+          ? droppableType.indexOf(critical.draggable.type) > -1
+          : droppableType === critical.draggable.type;
+      },
     )
     .map(
       (entry: DraggableEntry): DraggableDimension =>

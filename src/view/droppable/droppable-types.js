@@ -3,7 +3,7 @@ import { type Node } from 'react';
 import type {
   DraggableId,
   DroppableId,
-  TypeId,
+  DroppableType,
   Direction,
   Placeholder,
   State,
@@ -36,7 +36,7 @@ export type MapProps = {|
 |};
 
 export type DefaultProps = {|
-  type: TypeId,
+  type: DroppableType,
   isDropDisabled: boolean,
   isCombineEnabled: boolean,
   direction: Direction,

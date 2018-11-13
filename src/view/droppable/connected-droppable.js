@@ -3,7 +3,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import memoizeOne from 'memoize-one';
-import { storeKey } from '../context-keys';
+import { storeKey, defaultType } from '../context-keys';
 import Droppable from './droppable';
 import isStrictEqual from '../is-strict-equal';
 import shouldUsePlaceholder from '../../state/droppable/should-use-placeholder';
@@ -91,7 +91,7 @@ export const makeMapStateToProps = (): Selector => {
 };
 
 const defaultProps = ({
-  type: 'DEFAULT',
+  type: defaultType,
   direction: 'vertical',
   isDropDisabled: false,
   isCombineEnabled: false,
