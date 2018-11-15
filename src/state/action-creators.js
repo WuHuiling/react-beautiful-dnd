@@ -112,15 +112,32 @@ export type UpdateDroppableIsCombineEnabledArgs = {|
   isCombineEnabled: boolean,
 |};
 
+export type UpdateDroppableIsSortableChangedArgs = {|
+  id: DroppableId,
+  isSortable: boolean,
+|};
+
 export type UpdateDroppableIsCombineEnabledAction = {|
   type: 'UPDATE_DROPPABLE_IS_COMBINE_ENABLED',
   payload: UpdateDroppableIsCombineEnabledArgs,
+|};
+
+export type UpdateDroppableIsSortableChangedAction = {|
+  type: 'UPDATE_DROPPABLE_IS_SORTABLE_CHANGED',
+  payload: UpdateDroppableIsSortableChangedArgs,
 |};
 
 export const updateDroppableIsCombineEnabled = (
   args: UpdateDroppableIsCombineEnabledArgs,
 ): UpdateDroppableIsCombineEnabledAction => ({
   type: 'UPDATE_DROPPABLE_IS_COMBINE_ENABLED',
+  payload: args,
+});
+
+export const updateDroppableIsSortableChanged = (
+  args: UpdateDroppableIsSortableChangedArgs,
+): UpdateDroppableIsSortableChangedAction => ({
+  type: 'UPDATE_DROPPABLE_IS_SORTABLE_CHANGED',
   payload: args,
 });
 

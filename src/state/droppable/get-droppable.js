@@ -26,6 +26,7 @@ type Args = {|
   isEnabled: boolean,
   isCombineEnabled: boolean,
   isFixedOnPage: boolean,
+  isSortable: boolean,
   direction: 'vertical' | 'horizontal',
   client: BoxModel,
   // is null when in a fixed container
@@ -38,6 +39,7 @@ export default ({
   isEnabled,
   isCombineEnabled,
   isFixedOnPage,
+  isSortable,
   direction,
   client,
   page,
@@ -89,6 +91,7 @@ export default ({
     descriptor,
     isCombineEnabled,
     isFixedOnPage,
+    isSortable,
     axis,
     isEnabled,
     client,

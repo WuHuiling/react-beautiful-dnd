@@ -54,13 +54,39 @@ export default ({
         entry.callbacks.getDimensionAndWatchScroll(windowScroll, scrollOptions),
     );
 
+  const droppableMaps = {};
+  droppables.forEach((droppable: DroppableDimension) => {
+    droppableMaps[droppable.descriptor.id] = {
+      isSortable: droppable.isSortable,
+    };
+  });
+
   const draggables: DraggableDimension[] = values(entries.draggables)
     .filter(
       (entry: DraggableEntry): boolean => {
         const droppableType = entry.descriptor.droppableType;
-        return Array.isArray(droppableType)
-          ? droppableType.indexOf(critical.draggable.type) > -1
-          : droppableType === critical.draggable.type;
+        const droppableId = entry.descriptor.droppableId;
+        const droppable = droppableMaps[droppableId];
+
+        if (!droppable) {
+          return false;
+        }
+
+        const isWithinDroppableType = Array.isArray(droppableType)
+          ? droppableType.indexOf(entry.descriptor.type) > -1
+          : droppableType === entry.descriptor.type;
+
+        if (!isWithinDroppableType) {
+          return false;
+        }
+
+        // if the currentDroppable isn't sortable, then within this droppable,
+        // only the critical draggable need to publish its dimension info.
+        const isSortable = droppable.isSortable
+          ? true
+          : entry.descriptor.id === critical.draggable.id;
+
+        return isSortable;
       },
     )
     .map(

@@ -130,6 +130,7 @@ export default ({
         isEnabled: provided.isEnabled,
         isCombineEnabled: provided.isCombineEnabled,
         isFixedOnPage: provided.isFixedOnPage,
+        isSortable: provided.isSortable,
         direction: provided.axis.direction,
         client,
         page: withScroll(client, initialWindowScroll),

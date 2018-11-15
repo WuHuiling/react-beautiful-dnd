@@ -1,17 +1,27 @@
 // @flow
 import React, { PureComponent } from 'react';
-import type { Placeholder as PlaceholderType } from '../../types';
+import type { DroppableId, Placeholder as PlaceholderType } from '../../types';
 import type { PlaceholderStyle } from './placeholder-types';
 
 type Props = {|
   placeholder: PlaceholderType,
   innerRef?: () => ?HTMLElement,
+  droppableId?: DroppableId,
+  isVisible?: boolean,
 |};
 
 export default class Placeholder extends PureComponent<Props> {
   render() {
+    const { isVisible = true } = this.props;
     const placeholder: PlaceholderType = this.props.placeholder;
     const { client, display, tagName } = placeholder;
+
+    // draggable in foreign list and the foreign list is not sortable
+    // thus should hide the placeholder
+    const hidePlaceholder = this.props.droppableId && !isVisible;
+
+    const height = hidePlaceholder ? 0 : client.borderBox.height;
+    const width = hidePlaceholder ? 0 : client.borderBox.width;
 
     // The goal of the placeholder is to take up the same amount of space
     // as the original draggable
@@ -23,8 +33,8 @@ export default class Placeholder extends PureComponent<Props> {
 
       // creating borderBox
       boxSizing: 'border-box',
-      width: client.borderBox.width,
-      height: client.borderBox.height,
+      width,
+      height,
       // creating marginBox
       marginTop: client.margin.top,
       marginRight: client.margin.right,
