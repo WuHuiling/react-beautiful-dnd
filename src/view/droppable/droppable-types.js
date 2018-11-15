@@ -39,6 +39,7 @@ export type DefaultProps = {|
   type: DroppableType,
   isDropDisabled: boolean,
   isCombineEnabled: boolean,
+  isSortable: boolean,
   direction: Direction,
   ignoreContainerClipping: boolean,
 |};

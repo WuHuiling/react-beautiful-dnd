@@ -31,6 +31,7 @@ type Props = {|
   direction: Direction,
   isDropDisabled: boolean,
   isCombineEnabled: boolean,
+  isSortable: boolean,
   ignoreContainerClipping: boolean,
   getPlaceholderRef: () => ?HTMLElement,
   getDroppableRef: () => ?HTMLElement,
@@ -138,6 +139,11 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
   };
 
   scroll = (change: Position) => {
+    // updated by autoScroller, if it's not sortable, should prevent scroll
+    if (!this.props.isSortable) {
+      return;
+    }
+
     const closest: ?Element = getClosestScrollable(this.dragging);
     invariant(closest, 'Cannot scroll a droppable with no closest scrollable');
     closest.scrollTop += change.y;
@@ -188,8 +194,10 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
       this.props.isDropDisabled !== prevProps.isDropDisabled;
     const isCombineChanged: boolean =
       this.props.isCombineEnabled !== prevProps.isCombineEnabled;
+    const isSortableChanged: boolean =
+      this.props.isSortable !== prevProps.isSortable;
 
-    if (!isDisabledChanged && !isCombineChanged) {
+    if (!isDisabledChanged && !isCombineChanged && !isSortableChanged) {
       return;
     }
 
@@ -206,6 +214,13 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
       marshal.updateDroppableIsCombineEnabled(
         this.props.droppableId,
         this.props.isCombineEnabled,
+      );
+    }
+
+    if (isSortableChanged) {
+      marshal.updateDroppableIsSortableChanged(
+        this.props.droppableId,
+        this.props.isSortable,
       );
     }
   }
@@ -285,6 +300,7 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
         direction: this.props.direction,
         isDropDisabled: this.props.isDropDisabled,
         isCombineEnabled: this.props.isCombineEnabled,
+        isSortable: this.props.isSortable,
         shouldClipSubject: !this.props.ignoreContainerClipping,
       }),
     );
@@ -320,10 +336,11 @@ export default class DroppableDimensionPublisher extends React.Component<Props> 
       direction: this.props.direction,
       isDropDisabled: this.props.isDropDisabled,
       isCombineEnabled: this.props.isCombineEnabled,
+      isSortable: this.props.isSortable,
       shouldClipSubject: !this.props.ignoreContainerClipping,
     });
 
-    if (env.closestScrollable) {
+    if (env.closestScrollable && this.props.isSortable) {
       // bind scroll listener
 
       env.closestScrollable.addEventListener(
