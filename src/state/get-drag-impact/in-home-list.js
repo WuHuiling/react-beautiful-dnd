@@ -15,6 +15,7 @@ import getDisplacement from '../get-displacement';
 import getDisplacementMap from '../get-displacement-map';
 import isUserMovingForward from '../user-direction/is-user-moving-forward';
 import getDisplacedBy from '../get-displaced-by';
+import isSameType from './is-same-type';
 
 const getNewIndex = (
   startIndex: number,
@@ -76,9 +77,11 @@ export default ({
   );
   const displacement: number = displacedBy.value;
 
-  const displaced: Displacement[] = insideHome
+  const dimensionIndexes: Array<number> = [];
+
+  const dimensions = insideHome // prettier-ignore
     .filter(
-      (child: DraggableDimension): boolean => {
+      (child: DraggableDimension, index: number): boolean => {
         // do not want to displace the item that is dragging
         if (child === draggable) {
           return false;
@@ -103,6 +106,9 @@ export default ({
           // impact moving in a list as well as moving into it
           if (isMovingTowardStart) {
             const displacedEndEdge: number = end + displacement;
+            if (targetCenter > displacedEndEdge) {
+              dimensionIndexes.push(index);
+            }
             return targetCenter > displacedEndEdge;
           }
 
@@ -110,6 +116,10 @@ export default ({
           // Need to check if the center is going over the
           // start edge of the target
           // Can increase the amount of things that are displaced
+
+          if (targetCenter >= start) {
+            dimensionIndexes.push(index);
+          }
           return targetCenter >= start;
         }
 
@@ -128,24 +138,91 @@ export default ({
         // End displacement when we move onto the displaced start edge
         if (isMovingTowardStart) {
           const displacedStartEdge: number = start + displacement;
+          if (targetCenter < displacedStartEdge) {
+            dimensionIndexes.push(index);
+          }
           return targetCenter < displacedStartEdge;
         }
 
         // Continuing to move further away backwards from the start
         // Can increase the amount of things that are displaced
         // Shift once the center goes onto the end of the thing before it
+        if (targetCenter <= end) {
+          return dimensionIndexes.push(index);
+        }
         return targetCenter <= end;
       },
-    )
-    .map(
-      (dimension: DraggableDimension): Displacement =>
-        getDisplacement({
-          draggable: dimension,
-          destination: home,
-          previousImpact,
-          viewport: viewport.frame,
-        }),
     );
+
+  function getSortableDimensions(): DraggableDimension[] {
+    if (!dimensions.length) {
+      return dimensions;
+    }
+
+    if (isInFrontOfStart) {
+      const theLastDimension = dimensions[dimensions.length - 1];
+      const theLastDimensionIsSortable = isSameType(
+        theLastDimension,
+        draggable,
+      );
+
+      const theNextDimensionIndex =
+        dimensionIndexes[dimensionIndexes.length - 1] + 1;
+      const theNextDimension = insideHome[theNextDimensionIndex] || null;
+      const theNextDimensionIsSortable = isSameType(
+        theNextDimension,
+        draggable,
+      );
+
+      const isEndOfTheList = insideHome.length === theNextDimensionIndex;
+
+      if (
+        theLastDimensionIsSortable ||
+        theNextDimensionIsSortable ||
+        isEndOfTheList
+      ) {
+        return dimensions;
+      }
+
+      return [];
+    }
+
+    const theFirstDimension = dimensions[0];
+    const theFirstDimensionIsSortable = isSameType(
+      theFirstDimension,
+      draggable,
+    );
+
+    const thePreviousDimensionIndex = dimensionIndexes[0] - 1;
+    const thePreviousDimension = insideHome[thePreviousDimensionIndex] || null;
+    const thePreviousDimensionIsSortable = isSameType(
+      thePreviousDimension,
+      draggable,
+    );
+
+    const isTopOfTheList = thePreviousDimensionIndex === -1;
+
+    if (
+      theFirstDimensionIsSortable ||
+      thePreviousDimensionIsSortable ||
+      isTopOfTheList
+    ) {
+      return dimensions;
+    }
+
+    return [];
+  }
+
+  const sortableDimensions: DraggableDimension[] = getSortableDimensions();
+  const displaced: Displacement[] = sortableDimensions.map(
+    (dimension: DraggableDimension): Displacement =>
+      getDisplacement({
+        draggable: dimension,
+        destination: home,
+        previousImpact,
+        viewport: viewport.frame,
+      }),
+  );
 
   // Need to ensure that we always order by the closest impacted item
   // when in front of start (displacing backwards) we need to reverse
