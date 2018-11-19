@@ -26,6 +26,7 @@ import type {
 const defaultMapProps: MapProps = {
   isDraggingOver: false,
   draggingOverWith: null,
+  draggingFrom: null,
   placeholder: null,
 };
 
@@ -36,10 +37,12 @@ export const makeMapStateToProps = (): Selector => {
     (
       isDraggingOver: boolean,
       draggingOverWith: ?DraggableId,
+      draggingFrom: ?DroppableId,
       placeholder: ?Placeholder,
     ): MapProps => ({
       isDraggingOver,
       draggingOverWith,
+      draggingFrom,
       placeholder,
     }),
   );
@@ -62,7 +65,12 @@ export const makeMapStateToProps = (): Selector => {
       ? draggable.placeholder
       : null;
 
-    return getMapProps(true, draggable.descriptor.id, placeholder);
+    return getMapProps(
+      true,
+      draggable.descriptor.id,
+      draggable.descriptor.droppableId,
+      placeholder,
+    );
   };
 
   const selector = (state: State, ownProps: OwnProps): MapProps => {
