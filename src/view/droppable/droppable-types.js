@@ -23,12 +23,15 @@ export type Provided = {|
 export type StateSnapshot = {|
   isDraggingOver: boolean,
   draggingOverWith: ?DraggableId,
+  draggingFrom: ?DroppableId,
 |};
 
 export type MapProps = {|
   isDraggingOver: boolean,
   // The id of the draggable that is dragging over
   draggingOverWith: ?DraggableId,
+  // The droppableId of the draggable that is dragging over
+  draggingFrom: ?DroppableId,
   // placeholder is used to hold space when
   // not the user is dragging over a list that
   // is not the source list
