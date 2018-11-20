@@ -40,9 +40,10 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 const grid = 8;
 
-const getItemStyle = (isDragging, draggableStyle, id, disabled) => {
-  const background = id % 2 === 0 ? 'darkgray' : 'grey';
+const getItemStyle = (isDragging, draggableStyle, id, type) => {
+  const background = id % 2 === 0 ? 'darkgray' : 'darkgray';
   const height = id % 2 === 0 ? 60 : 60;
+  const color = type === 'type1' ? 'yellow' : '#49edf0';
 
   return {
     // some basic styles to make the items look a bit nicer
@@ -51,11 +52,11 @@ const getItemStyle = (isDragging, draggableStyle, id, disabled) => {
     lineHeight: '60px',
     // border: '1px solid',
     // padding: grid * 2,
-    // margin: `0 0 ${grid}px 0`,
+    margin: `0 0 ${grid}px 0`,
 
     // change background colour if dragging
     background: isDragging ? '#f0cace' : background,
-    color: id >= 8 ? 'yellow' : '#49edf0',
+    color,
 
     // styles we need to apply on draggables
     ...draggableStyle,
@@ -269,7 +270,7 @@ class Kanban extends React.Component {
     // } else {
     //   type2 = 'type2'
     // }
-    const ids = [1, 2, 12]
+    const ids = [2, 5, 6, 7, 12]
     if (ids.indexOf(item.uniqId) > -1) {
       type2 = 'type1'
     } else {
@@ -292,6 +293,7 @@ class Kanban extends React.Component {
               snapshot.isDragging,
               provided.draggableProps.style,
               item.uniqId,
+              type2
             )}>
             {`${item.content}_${type2}`}
           </div>
@@ -327,8 +329,8 @@ class Kanban extends React.Component {
     const droppable1 = this.renderDroppable('droppable1', this.state.droppable1, ['type1', 'type2'])
     const droppable2 = this.renderDroppable('droppable2', this.state.droppable2, ['type1', 'type2'])
 
-    const droppable3 = this.renderDroppable('droppable3', this.state.droppable3, 'type2', true)
-    const droppable4 = this.renderDroppable('droppable4', this.state.droppable4, 'type2', this.state.isSortable)
+    const droppable3 = this.renderDroppable('droppable3', this.state.droppable3, 'type2', false)
+    const droppable4 = this.renderDroppable('droppable4', this.state.droppable4, 'type2', false)
     // const droppable5 = this.renderDroppable('droppable5', this.state.droppable5, 'type3')
 
     return (
