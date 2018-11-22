@@ -22,6 +22,10 @@ export default class Placeholder extends PureComponent<Props> {
 
     const height = hidePlaceholder ? 0 : client.borderBox.height;
     const width = hidePlaceholder ? 0 : client.borderBox.width;
+    const marginTop = isVisible ? client.margin.top : 0;
+    const marginRight = isVisible ? client.margin.right : 0;
+    const marginBottom = isVisible ? client.margin.bottom : 0;
+    const marginLeft = isVisible ? client.margin.left : 0;
 
     // The goal of the placeholder is to take up the same amount of space
     // as the original draggable
@@ -36,10 +40,10 @@ export default class Placeholder extends PureComponent<Props> {
       width,
       height,
       // creating marginBox
-      marginTop: client.margin.top,
-      marginRight: client.margin.right,
-      marginBottom: client.margin.bottom,
-      marginLeft: client.margin.left,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
 
       // ## Avoiding collapsing
       // Avoiding the collapsing or growing of this element when pushed by flex child siblings.
