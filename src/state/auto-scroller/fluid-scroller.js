@@ -3,7 +3,7 @@ import rafSchd from 'raf-schd';
 import type { Rect, Position, Spacing } from 'css-box-model';
 import { horizontal, vertical } from '../axis';
 import { apply, isEqual, origin } from '../position';
-import { canPartiallyScroll, canScrollWindow } from './can-scroll';
+import { canPartiallyScroll, canScrollViewport } from './can-scroll';
 import getBestScrollableDroppable from './get-best-scrollable-droppable';
 import whatIsDraggedOver from '../droppable/what-is-dragged-over';
 import type {
@@ -190,7 +190,7 @@ const getRequiredScroll = ({
 };
 
 type Api = {|
-  scrollWindow: (change: Position) => void,
+  scrollViewport: (change: Position) => void,
   scrollDroppable: (id: DroppableId, change: Position) => void,
 |};
 
@@ -199,8 +199,8 @@ type ResultCancel = { cancel: () => void };
 
 export type FluidScroller = ResultFn & ResultCancel;
 
-export default ({ scrollWindow, scrollDroppable }: Api): FluidScroller => {
-  const scheduleWindowScroll = rafSchd(scrollWindow);
+export default ({ scrollViewport, scrollDroppable }: Api): FluidScroller => {
+  const scheduleViewportScroll = rafSchd(scrollViewport);
   const scheduleDroppableScroll = rafSchd(scrollDroppable);
 
   const scroller = (state: DraggingState): void => {
@@ -221,9 +221,9 @@ export default ({ scrollWindow, scrollDroppable }: Api): FluidScroller => {
 
       if (
         requiredWindowScroll &&
-        canScrollWindow(viewport, requiredWindowScroll)
+        canScrollViewport(viewport, requiredWindowScroll)
       ) {
-        scheduleWindowScroll(requiredWindowScroll);
+        scheduleViewportScroll(requiredWindowScroll);
         return;
       }
     }
@@ -270,7 +270,7 @@ export default ({ scrollWindow, scrollDroppable }: Api): FluidScroller => {
   };
 
   scroller.cancel = () => {
-    scheduleWindowScroll.cancel();
+    scheduleViewportScroll.cancel();
     scheduleDroppableScroll.cancel();
   };
 

@@ -3,7 +3,7 @@
 import type { EventBinding, EventOptions } from './event-types';
 import { bindEvents, unbindEvents } from './bind-events';
 
-type GetWindowFn = () => HTMLElement;
+type getViewportFn = () => HTMLElement;
 
 export type EventPreventer = {|
   preventNext: () => void,
@@ -12,7 +12,7 @@ export type EventPreventer = {|
 
 const sharedOptions: EventOptions = { capture: true };
 
-export default (getWindow: GetWindowFn): EventPreventer => {
+export default (getViewport: getViewportFn): EventPreventer => {
   let isBound: boolean = false;
 
   const bind = () => {
@@ -20,7 +20,7 @@ export default (getWindow: GetWindowFn): EventPreventer => {
       return;
     }
     isBound = true;
-    bindEvents(getWindow(), pointerEvents, sharedOptions);
+    bindEvents(getViewport(), pointerEvents, sharedOptions);
   };
 
   const unbind = () => {
@@ -28,7 +28,7 @@ export default (getWindow: GetWindowFn): EventPreventer => {
       return;
     }
     isBound = false;
-    unbindEvents(getWindow(), pointerEvents, sharedOptions);
+    unbindEvents(getViewport(), pointerEvents, sharedOptions);
   };
 
   const pointerEvents: EventBinding[] = [

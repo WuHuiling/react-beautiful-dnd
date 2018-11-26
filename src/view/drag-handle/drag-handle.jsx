@@ -3,7 +3,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import memoizeOne from 'memoize-one';
 import invariant from 'tiny-invariant';
-import getWindowFromRef from '../get-window-from-ref';
 import getDragHandleRef from './util/get-drag-handle-ref';
 import type { Props, DragHandleProps } from './drag-handle-types';
 import type {
@@ -20,6 +19,7 @@ import createMouseSensor from './sensor/create-mouse-sensor';
 import createKeyboardSensor from './sensor/create-keyboard-sensor';
 import createTouchSensor from './sensor/create-touch-sensor';
 import { warning } from '../../dev-warning';
+import getViewportElement from '../window/get-viewport-element';
 
 const preventHtml5Dnd = (event: DragEvent) => {
   event.preventDefault();
@@ -48,13 +48,21 @@ export default class DragHandle extends Component<Props> {
   constructor(props: Props, context: Object) {
     super(props, context);
 
-    const getWindow = (): HTMLElement =>
-      getWindowFromRef(this.props.getDraggableRef());
+    const getViewport = (): HTMLElement => {
+      const element = getViewportElement(this.props.viewportClassName);
+      const hasElement = element !== document.documentElement;
+      if (hasElement) {
+        return element;
+      }
+
+      const ref = this.props.getDraggableRef();
+      return ref ? ref.ownerDocument.defaultView : window;
+    };
 
     const args: CreateSensorArgs = {
       callbacks: this.props.callbacks,
       getDraggableRef: this.props.getDraggableRef,
-      getWindow,
+      getViewport,
       canStartCapturing: this.canStartCapturing,
     };
 

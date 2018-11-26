@@ -18,24 +18,27 @@ import type {
   Critical,
   Viewport,
 } from '../../types';
-import getViewport from '../../view/window/get-viewport';
 import isSameValueArray from './is-same-value-array';
+import getViewport from '../../view/window/get-viewport';
 
 type Args = {|
   critical: Critical,
   scrollOptions: ScrollOptions,
   entries: Entries,
+  viewportClassName: ?string,
 |};
 
 export default ({
   critical,
   scrollOptions,
   entries,
+  viewportClassName,
 }: Args): StartPublishingResult => {
   const timingKey: string = 'Initial collection from DOM';
   timings.start(timingKey);
-  const viewport: Viewport = getViewport();
-  const windowScroll: Position = viewport.scroll.current;
+
+  const viewport: Viewport = getViewport(viewportClassName);
+  const viewportScroll: Position = viewport.scroll.current;
 
   const home: DroppableDescriptor = critical.droppable;
 
@@ -51,7 +54,7 @@ export default ({
     )
     .map(
       (entry: DroppableEntry): DroppableDimension =>
-        entry.callbacks.getDimensionAndWatchScroll(windowScroll, scrollOptions),
+        entry.callbacks.getDimensionAndWatchScroll(viewportScroll, scrollOptions), // prettier-ignore
     );
 
   const droppableMaps = {};
@@ -91,7 +94,7 @@ export default ({
     )
     .map(
       (entry: DraggableEntry): DraggableDimension =>
-        entry.getDimension(windowScroll),
+        entry.getDimension(viewportScroll),
     );
 
   const dimensions: DimensionMap = {

@@ -22,6 +22,7 @@ import {
   droppableIdKey,
   styleContextKey,
   droppableTypeKey,
+  viewportKey,
 } from '../context-keys';
 import * as timings from '../../debug/timings';
 import type {
@@ -39,6 +40,7 @@ import type {
 import getWindowScroll from '../window/get-window-scroll';
 import throwIfRefIsInvalid from '../throw-if-invalid-inner-ref';
 import checkOwnProps from './check-own-props';
+import getViewportElement from '../window/get-viewport-element';
 
 export const zIndexOptions: ZIndexOptions = {
   dragging: 5000,
@@ -90,6 +92,7 @@ export default class Draggable extends Component<Props> {
     [droppableTypeKey]: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
       .isRequired,
     [styleContextKey]: PropTypes.string.isRequired,
+    [viewportKey]: PropTypes.string,
   };
 
   constructor(props: Props, context: Object) {
@@ -105,10 +108,12 @@ export default class Draggable extends Component<Props> {
       onMoveDown: props.moveDown,
       onMoveRight: props.moveRight,
       onMoveLeft: props.moveLeft,
-      onWindowScroll: () =>
+      onWindowScroll: () => {
+        const viewportElement = getViewportElement(context[viewportKey]);
         props.moveByWindowScroll({
-          newScroll: getWindowScroll(),
-        }),
+          newScroll: getWindowScroll(viewportElement),
+        });
+      },
     };
 
     this.callbacks = callbacks;
@@ -146,11 +151,13 @@ export default class Draggable extends Component<Props> {
     );
     const { clientSelection, movementMode } = options;
     const { lift, draggableId } = this.props;
+    const viewportClassName = this.context[viewportKey];
 
     lift({
       id: draggableId,
       clientSelection,
       movementMode,
+      viewportClassName,
     });
     timings.finish('LIFT');
   };
@@ -359,6 +366,7 @@ export default class Draggable extends Component<Props> {
           isEnabled={!isDragDisabled}
           callbacks={this.callbacks}
           getDraggableRef={this.getDraggableRef}
+          viewportClassName={this.context[viewportKey]}
           // by default we do not allow dragging on interactive elements
           canDragInteractiveElements={disableInteractiveElementBlocking}
         >

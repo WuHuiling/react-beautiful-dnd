@@ -92,7 +92,7 @@ export const canPartiallyScroll = ({
   return false;
 };
 
-export const canScrollWindow = (
+export const canScrollViewport = (
   viewport: Viewport,
   change: Position,
 ): boolean =>
@@ -106,7 +106,7 @@ export const getWindowOverlap = (
   viewport: Viewport,
   change: Position,
 ): ?Position => {
-  if (!canScrollWindow(viewport, change)) {
+  if (!canScrollViewport(viewport, change)) {
     return null;
   }
 

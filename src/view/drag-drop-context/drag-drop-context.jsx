@@ -9,9 +9,9 @@ import createStyleMarshal, {
   resetStyleContext,
 } from '../style-marshal/style-marshal';
 import canStartDrag from '../../state/can-start-drag';
-import scrollWindow from '../window/scroll-window';
 import createAnnouncer from '../announcer/announcer';
 import createAutoScroller from '../../state/auto-scroller';
+import scrollViewportFn from '../window/scroll-window';
 import type { Announcer } from '../announcer/announcer-types';
 import type { AutoScroller } from '../../state/auto-scroller/auto-scroller-types';
 import type { StyleMarshal } from '../style-marshal/style-marshal-types';
@@ -26,6 +26,7 @@ import {
   dimensionMarshalKey,
   styleContextKey,
   canLiftContextKey,
+  viewportKey,
 } from '../context-keys';
 import {
   clean,
@@ -45,6 +46,7 @@ type Props = {|
   ...Responders,
   // we do not technically need any children for this component
   children: Node | null,
+  viewportClassName: ?string,
 |};
 
 type Context = {
@@ -128,8 +130,10 @@ export default class DragDropContext extends React.Component<Props> {
     );
     this.dimensionMarshal = createDimensionMarshal(callbacks);
 
+    const scrollViewport = scrollViewportFn(props.viewportClassName);
+
     this.autoScroller = createAutoScroller({
-      scrollWindow,
+      scrollViewport,
       scrollDroppable: this.dimensionMarshal.scrollDroppable,
       ...bindActionCreators(
         {
@@ -150,6 +154,7 @@ export default class DragDropContext extends React.Component<Props> {
     [dimensionMarshalKey]: PropTypes.object.isRequired,
     [styleContextKey]: PropTypes.string.isRequired,
     [canLiftContextKey]: PropTypes.func.isRequired,
+    [viewportKey]: PropTypes.string,
   };
 
   getChildContext(): Context {
@@ -158,6 +163,7 @@ export default class DragDropContext extends React.Component<Props> {
       [dimensionMarshalKey]: this.dimensionMarshal,
       [styleContextKey]: this.styleMarshal.styleContext,
       [canLiftContextKey]: this.canLift,
+      [viewportKey]: this.props.viewportClassName,
     };
   }
 

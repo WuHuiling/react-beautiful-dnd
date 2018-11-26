@@ -13,19 +13,23 @@ const getIsFixed = (el: ?Element): boolean => {
   if (!el) {
     return false;
   }
+
   const style: CSSStyleDeclaration = window.getComputedStyle(el);
-  if (style.position === 'fixed') {
-    return true;
-  }
-  return getIsFixed(el.parentElement);
+  return style.position === 'fixed';
+
+  // if (style.position === 'fixed') {
+  //   return true;
+  // }
+  // return getIsFixed(el.parentElement);
 };
 
 export default (start: Element): Env => {
   const closestScrollable: ?Element = getClosestScrollable(start);
   const isFixedOnPage: boolean = getIsFixed(start);
+  const isClosestScrollable: boolean = getIsFixed(closestScrollable);
 
   return {
     closestScrollable,
-    isFixedOnPage,
+    isFixedOnPage: isFixedOnPage && isClosestScrollable,
   };
 };

@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import { type Position } from 'css-box-model';
 import { add, subtract } from '../position';
 import {
-  canScrollWindow,
+  canScrollViewport,
   canScrollDroppable,
   getWindowOverlap,
   getDroppableOverlap,
@@ -19,7 +19,7 @@ import type {
 
 type Args = {|
   scrollDroppable: (id: DroppableId, change: Position) => void,
-  scrollWindow: (offset: Position) => void,
+  scrollViewport: (offset: Position) => void,
   move: (args: MoveArgs) => mixed,
 |};
 
@@ -30,7 +30,7 @@ type Remainder = Position;
 export default ({
   move,
   scrollDroppable,
-  scrollWindow,
+  scrollViewport,
 }: Args): JumpScroller => {
   const moveByOffset = (state: DraggingState, offset: Position) => {
     const client: Position = add(state.current.client.selection, offset);
@@ -71,7 +71,7 @@ export default ({
       return change;
     }
 
-    if (!canScrollWindow(viewport, change)) {
+    if (!canScrollViewport(viewport, change)) {
       // window cannot absorb any of the scroll
       return change;
     }
@@ -80,13 +80,13 @@ export default ({
 
     // window can absorb entire scroll
     if (!overlap) {
-      scrollWindow(change);
+      scrollViewport(change);
       return null;
     }
 
     // window can only absorb a part of the scroll
     const whatTheWindowCanScroll: Position = subtract(change, overlap);
-    scrollWindow(whatTheWindowCanScroll);
+    scrollViewport(whatTheWindowCanScroll);
 
     const remainder: Position = subtract(change, whatTheWindowCanScroll);
     return remainder;

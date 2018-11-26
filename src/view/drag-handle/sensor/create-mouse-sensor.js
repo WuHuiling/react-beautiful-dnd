@@ -37,7 +37,7 @@ const mouseDownMarshal: EventMarshal = createEventMarshal();
 
 export default ({
   callbacks,
-  getWindow,
+  getViewport,
   canStartCapturing,
 }: CreateSensorArgs): MouseSensor => {
   let state: State = {
@@ -51,7 +51,7 @@ export default ({
   const isCapturing = (): boolean => Boolean(state.pending || state.isDragging);
   const schedule = createScheduler(callbacks);
   const postDragEventPreventer: EventPreventer = createPostDragEventPreventer(
-    getWindow,
+    getViewport,
   );
 
   const startDragging = (fn?: Function = noop) => {
@@ -257,12 +257,12 @@ export default ({
   ];
 
   const bindWindowEvents = () => {
-    const win: HTMLElement = getWindow();
+    const win: HTMLElement = getViewport();
     bindEvents(win, windowBindings, { capture: true });
   };
 
   const unbindWindowEvents = () => {
-    const win: HTMLElement = getWindow();
+    const win: HTMLElement = getViewport();
     unbindEvents(win, windowBindings, { capture: true });
   };
 

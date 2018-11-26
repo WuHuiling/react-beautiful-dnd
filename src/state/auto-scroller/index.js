@@ -9,22 +9,22 @@ import type { MoveArgs } from '../action-creators';
 type Args = {|
   scrollDroppable: (id: DroppableId, change: Position) => void,
   move: (args: MoveArgs) => mixed,
-  scrollWindow: (offset: Position) => void,
+  scrollViewport: (offset: Position) => void,
 |};
 
 export default ({
   scrollDroppable,
-  scrollWindow,
+  scrollViewport,
   move,
 }: Args): AutoScroller => {
   const fluidScroll: FluidScroller = createFluidScroller({
-    scrollWindow,
+    scrollViewport,
     scrollDroppable,
   });
 
   const jumpScroll: JumpScroller = createJumpScroller({
     move,
-    scrollWindow,
+    scrollViewport,
     scrollDroppable,
   });
 

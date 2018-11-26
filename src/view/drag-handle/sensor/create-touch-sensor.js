@@ -104,7 +104,7 @@ const initial: State = {
 
 export default ({
   callbacks,
-  getWindow,
+  getViewport,
   canStartCapturing,
 }: CreateSensorArgs): TouchSensor => {
   let state: State = initial;
@@ -120,7 +120,7 @@ export default ({
     Boolean(state.pending || state.isDragging || state.longPressTimerId);
   const schedule = createScheduler(callbacks);
   const postDragEventPreventer: EventPreventer = createPostDragEventPreventer(
-    getWindow,
+    getViewport,
   );
 
   const startDragging = () => {
@@ -372,11 +372,11 @@ export default ({
   ];
 
   const bindWindowEvents = () => {
-    bindEvents(getWindow(), windowBindings, { capture: true });
+    bindEvents(getViewport(), windowBindings, { capture: true });
   };
 
   const unbindWindowEvents = () => {
-    unbindEvents(getWindow(), windowBindings, { capture: true });
+    unbindEvents(getViewport(), windowBindings, { capture: true });
   };
 
   // entry point

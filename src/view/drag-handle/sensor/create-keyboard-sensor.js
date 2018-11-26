@@ -30,7 +30,7 @@ const noop = () => {};
 
 export default ({
   callbacks,
-  getWindow,
+  getViewport,
   getDraggableRef,
   canStartCapturing,
 }: CreateSensorArgs): KeyboardSensor => {
@@ -202,11 +202,11 @@ export default ({
   ];
 
   const bindWindowEvents = () => {
-    bindEvents(getWindow(), windowBindings, { capture: true });
+    bindEvents(getViewport(), windowBindings, { capture: true });
   };
 
   const unbindWindowEvents = () => {
-    unbindEvents(getWindow(), windowBindings, { capture: true });
+    unbindEvents(getViewport(), windowBindings, { capture: true });
   };
 
   const sensor: KeyboardSensor = {

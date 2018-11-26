@@ -272,6 +272,7 @@ export type ScrollOptions = {|
 export type LiftRequest = {|
   draggableId: DraggableId,
   scrollOptions: ScrollOptions,
+  viewportClassName: ?string,
 |};
 
 export type Critical = {|
@@ -283,6 +284,8 @@ export type Viewport = {|
   // live updates with the latest values
   frame: Rect,
   scroll: ScrollDetails,
+  element: HTMLElement,
+  elementPosition: ClientRect,
 |};
 
 export type DimensionMap = {|
@@ -311,6 +314,7 @@ export type DraggingState = {|
   userDirection: UserDirection,
   impact: DragImpact,
   viewport: Viewport,
+  viewportElement: HTMLElement,
   // when there is a fixed list we want to opt out of this behaviour
   isWindowScrollAllowed: boolean,
   // if we need to jump the scroll (keyboard dragging)

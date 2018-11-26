@@ -40,7 +40,7 @@ const wasDestinationChange = (
 
 // check to see if the viewport max scroll has changed
 const getUpdatedViewportMax = (viewport: Viewport): ?Position => {
-  const maxScroll: Position = getMaxWindowScroll();
+  const maxScroll: Position = getMaxWindowScroll(viewport.element);
 
   // No change in current or max scroll
   if (isEqual(viewport.scroll.max, maxScroll)) {

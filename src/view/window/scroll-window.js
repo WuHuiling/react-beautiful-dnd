@@ -1,7 +1,8 @@
 // @flow
 import { type Position } from 'css-box-model';
+import getViewportElement from './get-viewport-element';
 
-// Not guarenteed to scroll by the entire amount
-export default (change: Position): void => {
-  window.scrollBy(change.x, change.y);
+export default (className?: string) => (change: Position): void => {
+  const doc = getViewportElement(className);
+  doc.scrollBy(change.x, change.y);
 };

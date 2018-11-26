@@ -24,6 +24,7 @@ import type {
   StartPublishingResult,
 } from './dimension-marshal-types';
 import isSameValueArray from './is-same-value-array';
+import { resetViewportElement } from '../../view/window/get-viewport-element';
 
 type Collection = {|
   critical: Critical,
@@ -309,6 +310,9 @@ export default (callbacks: Callbacks) => {
 
     // Finally - clear our collection
     collection = null;
+
+    // clear viewport information
+    resetViewportElement();
   };
 
   const startPublishing = (request: LiftRequest): StartPublishingResult => {
@@ -335,6 +339,7 @@ export default (callbacks: Callbacks) => {
       critical,
       entries,
       scrollOptions: request.scrollOptions,
+      viewportClassName: request.viewportClassName,
     });
   };
 

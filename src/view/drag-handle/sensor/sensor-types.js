@@ -16,7 +16,7 @@ type SensorBase = {|
 export type CreateSensorArgs = {|
   callbacks: Callbacks,
   getDraggableRef: () => ?HTMLElement,
-  getWindow: () => HTMLElement,
+  getViewport: () => HTMLElement,
   canStartCapturing: (event: Event) => boolean,
 |};
 
