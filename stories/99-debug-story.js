@@ -271,6 +271,10 @@ class Kanban extends React.Component {
       return;
     }
 
+    if (destination.droppableId === 'root') {
+      return;
+    }
+
     if (source.droppableId === destination.droppableId) {
       const items = reorder(
         this.state[source.droppableId],
@@ -461,7 +465,7 @@ class App extends React.Component<*> {
     return (
       <div className='root1'>
         <div className='root2'>
-          {/*<div className='sidebar'>side bar</div>*/}
+          <div className='sidebar'>side bar</div>
           <Kanban />
         </div>
       </div>
