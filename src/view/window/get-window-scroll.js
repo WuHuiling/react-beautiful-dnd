@@ -24,7 +24,7 @@ import { type Position } from 'css-box-model';
 // documentElement.scrollTop: no update. Stays at 0
 // window.pageYOffset: updates to whole number
 
-export default (): Position => ({
-  x: window.pageXOffset,
-  y: window.pageYOffset,
+export default (viewport: HTMLElement): Position => ({
+  x: viewport.scrollLeft,
+  y: viewport.scrollTop,
 });

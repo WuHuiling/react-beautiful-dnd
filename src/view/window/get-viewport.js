@@ -5,15 +5,24 @@ import type { Viewport } from '../../types';
 import { origin } from '../../state/position';
 import getWindowScroll from './get-window-scroll';
 import getMaxWindowScroll from './get-max-window-scroll';
+import getViewportElement from './get-viewport-element';
 
-export default (): Viewport => {
-  const scroll: Position = getWindowScroll();
-  const maxScroll: Position = getMaxWindowScroll();
+export default (viewportClassName: ?string): Viewport => {
+  const doc = getViewportElement(viewportClassName);
+  const scroll: Position = getWindowScroll(doc);
+  const maxScroll: Position = getMaxWindowScroll(doc);
 
-  const top: number = scroll.y;
-  const left: number = scroll.x;
+  let offsetTop: number = 0;
+  let offsetLeft: number = 0;
+  if (doc !== document.documentElement) {
+    const position = doc.getBoundingClientRect();
+    offsetTop = position.top;
+    offsetLeft = position.left;
+  }
 
-  const doc: ?HTMLElement = document.documentElement;
+  const top: number = offsetTop + scroll.y;
+  const left: number = offsetLeft + scroll.x;
+
   invariant(doc, 'Could not find document.documentElement');
 
   // Using these values as they do not consider scrollbars
@@ -43,6 +52,8 @@ export default (): Viewport => {
         displacement: origin,
       },
     },
+    element: doc,
+    elementOffset: { y: offsetTop, x: offsetLeft },
   };
 
   return viewport;

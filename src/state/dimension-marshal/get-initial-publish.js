@@ -25,16 +25,18 @@ type Args = {|
   critical: Critical,
   scrollOptions: ScrollOptions,
   entries: Entries,
+  viewportClassName: ?string,
 |};
 
 export default ({
   critical,
   scrollOptions,
   entries,
+  viewportClassName,
 }: Args): StartPublishingResult => {
   const timingKey: string = 'Initial collection from DOM';
   timings.start(timingKey);
-  const viewport: Viewport = getViewport();
+  const viewport: Viewport = getViewport(viewportClassName);
   const windowScroll: Position = viewport.scroll.current;
 
   const home: DroppableDescriptor = critical.droppable;

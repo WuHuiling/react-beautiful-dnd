@@ -57,5 +57,6 @@ export type Props = {|
   getDraggableRef: () => ?HTMLElement,
   // whether interactive elements should be permitted to start a drag
   canDragInteractiveElements: boolean,
+  viewportClassName: ?string,
   children: (?DragHandleProps) => Node,
 |};

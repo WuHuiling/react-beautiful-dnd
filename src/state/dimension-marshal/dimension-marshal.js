@@ -335,6 +335,7 @@ export default (callbacks: Callbacks) => {
       critical,
       entries,
       scrollOptions: request.scrollOptions,
+      viewportClassName: request.viewportClassName,
     });
   };
 

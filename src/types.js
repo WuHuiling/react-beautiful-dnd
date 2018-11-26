@@ -272,6 +272,7 @@ export type ScrollOptions = {|
 export type LiftRequest = {|
   draggableId: DraggableId,
   scrollOptions: ScrollOptions,
+  viewportClassName: ?string,
 |};
 
 export type Critical = {|
@@ -283,6 +284,8 @@ export type Viewport = {|
   // live updates with the latest values
   frame: Rect,
   scroll: ScrollDetails,
+  element: HTMLElement,
+  elementOffset: Position,
 |};
 
 export type DimensionMap = {|

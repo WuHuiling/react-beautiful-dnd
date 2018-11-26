@@ -15,7 +15,7 @@ export default (getMarshal: () => DimensionMarshal) => ({
   }
 
   const marshal: DimensionMarshal = getMarshal();
-  const { id, clientSelection, movementMode } = action.payload;
+  const { id, clientSelection, movementMode, viewportClassName } = action.payload; // prettier-ignore
   const initial: State = getState();
 
   // flush dropping animation if needed
@@ -34,6 +34,7 @@ export default (getMarshal: () => DimensionMarshal) => ({
   const request: LiftRequest = {
     draggableId: id,
     scrollOptions,
+    viewportClassName,
   };
   // Let's get the marshal started!
   const { critical, dimensions, viewport } = marshal.startPublishing(request);

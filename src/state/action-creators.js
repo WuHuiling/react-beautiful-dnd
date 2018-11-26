@@ -19,6 +19,7 @@ export type LiftArgs = {|
   id: DraggableId,
   clientSelection: Position,
   movementMode: MovementMode,
+  viewportClassName: ?string,
 |};
 
 export type LiftAction = {|
